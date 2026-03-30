@@ -1,0 +1,224 @@
+### FUN_00690cb0 @ 00690cb0 (414 bytes) ###
+
+void FUN_00690cb0(int param_1,int param_2,undefined4 param_3,double *param_4,double *param_5,
+                 short param_6)
+
+{
+  undefined4 uVar1;
+  undefined4 uVar2;
+  undefined4 uVar3;
+  undefined4 uVar4;
+  uint uVar5;
+  int iVar6;
+  int extraout_EDX;
+  int iVar7;
+  int extraout_EDX_00;
+  undefined4 *in_FS_OFFSET;
+  bool bVar8;
+  undefined4 uStack_98;
+  undefined1 *puStack_94;
+  undefined1 *puStack_90;
+  short local_80;
+  ushort local_7e;
+  int local_78;
+  double local_6c;
+  double local_5c;
+  double local_4c;
+  double local_3c;
+  
+  puStack_90 = &stack0xfffffffc;
+  puStack_94 = &LAB_00690e45;
+  uStack_98 = *in_FS_OFFSET;
+  *in_FS_OFFSET = &uStack_98;
+  local_3c = 0.0;
+  local_4c = 0.0;
+  local_5c = 0.0;
+  local_6c = 0.0;
+  local_78 = 0;
+  if (param_6 != 0) {
+    local_80 = param_6;
+    local_7e = 1;
+    do {
+      uVar5 = (uint)local_7e;
+      if (0x721 < uVar5) {
+        uVar5 = thunk_FUN_004072dc();
+      }
+      uVar1 = *(undefined4 *)(param_1 + uVar5 * 8);
+      uVar2 = *(undefined4 *)(param_1 + 4 + uVar5 * 8);
+      uVar5 = (uint)local_7e;
+      if (0x721 < uVar5) {
+        uVar5 = thunk_FUN_004072dc();
+      }
+      uVar3 = *(undefined4 *)(param_2 + uVar5 * 8);
+      uVar4 = *(undefined4 *)(param_2 + 4 + uVar5 * 8);
+      if (0x721 < local_7e) {
+        thunk_FUN_004072dc();
+      }
+      uVar5 = FUN_00407bcc();
+      iVar6 = uVar5 + 1;
+      iVar7 = extraout_EDX + (uint)(0xfffffffe < uVar5);
+      if (SCARRY4(extraout_EDX,0) != SCARRY4(extraout_EDX,(uint)(0xfffffffe < uVar5))) {
+        iVar6 = thunk_FUN_004072dc();
+        iVar7 = extraout_EDX_00;
+      }
+      if (iVar6 >> 0x1f != iVar7) {
+        iVar6 = thunk_FUN_004072dc();
+      }
+      local_3c = (double)iVar6 * (double)CONCAT44(uVar4,uVar3) + local_3c;
+      local_4c = (double)iVar6 * (double)CONCAT44(uVar2,uVar1) + local_4c;
+      local_5c = (double)iVar6 * (double)CONCAT44(uVar2,uVar1) * (double)CONCAT44(uVar2,uVar1) +
+                 local_5c;
+      local_6c = (double)iVar6 * (double)CONCAT44(uVar2,uVar1) * (double)CONCAT44(uVar4,uVar3) +
+                 local_6c;
+      bVar8 = SCARRY4(local_78,iVar6);
+      local_78 = local_78 + iVar6;
+      if (bVar8) {
+        thunk_FUN_004072dc();
+      }
+      local_7e = local_7e + 1;
+      local_80 = local_80 + -1;
+    } while (local_80 != 0);
+  }
+  local_4c = local_4c / (double)local_78;
+  *param_5 = (local_6c / (double)local_78 - local_4c * (local_3c / (double)local_78)) /
+             (local_5c / (double)local_78 - local_4c * local_4c);
+  *param_4 = local_3c / (double)local_78 - local_4c * *param_5;
+  *in_FS_OFFSET = uStack_98;
+  return;
+}
+
+
+
+### FUN_00b18dac @ 00b18dac (88 bytes) ###
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+void FUN_00b18dac(void)
+
+{
+  FUN_00407b58();
+  return;
+}
+
+
+
+### FUN_00407180 @ 00407180 (27 bytes) ###
+
+int FUN_00407180(int param_1)
+
+{
+  int iVar1;
+  
+  if (param_1 < 1) {
+    return 0;
+  }
+  iVar1 = (*(code *)PTR_FUN_00b9c760)();
+  if (iVar1 != 0) {
+    return iVar1;
+  }
+  iVar1 = FUN_004072dc(1);
+  return iVar1;
+}
+
+
+
+### Xrefs to DAT_00ca4544 ###
+Symbols at 0x00ca4544: 1
+  DAT_00ca4544 type=Label
+  From: 0x008ad1b0 type=READ
+  From: 0x008ad1e2 type=WRITE
+  From: 0x008ad072 type=READ
+  From: 0x008ad0a1 type=WRITE
+  From: 0x008acfc2 type=READ
+  From: 0x008b26bd type=READ
+  From: 0x008b26ec type=READ
+  From: 0x008b36aa type=READ
+  From: 0x008b3729 type=READ
+  From: 0x008acf0c type=READ
+  From: 0x008aea44 type=READ
+  From: 0x007f39e6 type=READ
+  From: 0x007f3a61 type=READ
+  From: 0x007f3aae type=READ
+  From: 0x007f3bd6 type=READ
+  From: 0x007e9c7d type=READ
+  From: 0x007e9d33 type=READ
+  From: 0x007f1fa0 type=READ
+  From: 0x007f1fd5 type=READ
+  From: 0x007f84a0 type=READ
+  From: 0x007f855a type=READ
+  From: 0x007f85bd type=READ
+  From: 0x007f8691 type=READ
+  From: 0x007f87d3 type=READ
+  From: 0x007f886f type=READ
+  From: 0x007f8908 type=READ
+  From: 0x007f0073 type=READ
+  From: 0x007f00e0 type=READ
+  From: 0x007f0143 type=READ
+  From: 0x007f01a6 type=READ
+  From: 0x007f008a type=READ
+  From: 0x007ee8da type=READ
+  From: 0x007eefc2 type=READ
+  From: 0x007ef02d type=READ
+  From: 0x007ef115 type=READ
+  From: 0x007ef13a type=READ
+  From: 0x007ef293 type=READ
+  From: 0x007ee4e5 type=READ
+  From: 0x007ee52c type=READ
+  From: 0x007ee582 type=READ
+  From: 0x007ee72a type=READ
+  From: 0x007edeb8 type=READ
+  From: 0x007edeed type=READ
+  From: 0x007ee123 type=READ
+  From: 0x007ee164 type=READ
+  From: 0x007ee1b0 type=READ
+  From: 0x00baa39c type=DATA
+  From: 0x007e62da type=READ
+  From: 0x007e6385 type=READ
+  From: 0x007e3cb4 type=READ
+  From: 0x007e3d21 type=READ
+  From: 0x007e3d84 type=READ
+  From: 0x007e3de7 type=READ
+  From: 0x007e3ecc type=READ
+  From: 0x007e3ccb type=READ
+  From: 0x00b9906f type=WRITE
+References to 0x00ca4544: 56
+
+### Symbols near 0x00ca4544 ###
+  0x00ca4538: DAT_00ca4538 (Label)
+  0x00ca453c: DAT_00ca453c (Label)
+  0x00ca4540: DAT_00ca4540 (Label)
+  0x00ca4544: DAT_00ca4544 (Label)
+  0x00ca4548: DAT_00ca4548 (Label)
+  0x00ca454c: DAT_00ca454c (Label)
+  0x00ca4550: DAT_00ca4550 (Label)
+  0x00ca4554: DAT_00ca4554 (Label)
+  0x00ca4558: DAT_00ca4558 (Label)
+  0x00ca455c: DAT_00ca455c (Label)
+  0x00ca4560: DAT_00ca4560 (Label)
+  0x00ca4564: DAT_00ca4564 (Label)
+  0x00ca4568: DAT_00ca4568 (Label)
+  0x00ca456c: DAT_00ca456c (Label)
+  0x00ca4570: DAT_00ca4570 (Label)
+  0x00ca4574: DAT_00ca4574 (Label)
+  0x00ca4578: DAT_00ca4578 (Label)
+  0x00ca457c: DAT_00ca457c (Label)
+  0x00ca4580: DAT_00ca4580 (Label)
+  0x00ca4584: DAT_00ca4584 (Label)
+  0x00ca4588: DAT_00ca4588 (Label)
+  0x00ca458c: DAT_00ca458c (Label)
+  0x00ca4590: DAT_00ca4590 (Label)
+  0x00ca4594: DAT_00ca4594 (Label)
+  0x00ca4598: DAT_00ca4598 (Label)
+  0x00ca459c: DAT_00ca459c (Label)
+  0x00ca45a0: DAT_00ca45a0 (Label)
+  0x00ca45a4: DAT_00ca45a4 (Label)
+  0x00ca45a8: DAT_00ca45a8 (Label)
+  0x00ca45ac: DAT_00ca45ac (Label)
+  0x00ca45b0: DAT_00ca45b0 (Label)
+  0x00ca45b4: DAT_00ca45b4 (Label)
+  0x00ca45b8: DAT_00ca45b8 (Label)
+  0x00ca45c0: DAT_00ca45c0 (Label)
+  0x00ca45c4: DAT_00ca45c4 (Label)
+  0x00ca45c8: DAT_00ca45c8 (Label)
+  0x00ca45cc: DAT_00ca45cc (Label)
+  0x00ca45d0: DAT_00ca45d0 (Label)

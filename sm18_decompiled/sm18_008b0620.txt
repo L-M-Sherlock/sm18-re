@@ -1,0 +1,28 @@
+### FUN_008b0620 @ 008b0620 (81 bytes) ###
+
+void FUN_008b0620(undefined1 param_1,char param_2)
+
+{
+  undefined4 *in_FS_OFFSET;
+  undefined4 uStack_2c;
+  undefined1 *puStack_28;
+  undefined1 *puStack_24;
+  
+  puStack_24 = &stack0xfffffffc;
+  puStack_28 = &LAB_008b0667;
+  uStack_2c = *in_FS_OFFSET;
+  *in_FS_OFFSET = &uStack_2c;
+  if (param_2 == '\x01') {
+    puStack_24 = &stack0xfffffffc;
+    FUN_008b0520(param_1);
+  }
+  else {
+    FUN_008b03a8(param_1);
+  }
+  *in_FS_OFFSET = uStack_2c;
+  return;
+}
+
+
+
+// No function at 0x008b3814

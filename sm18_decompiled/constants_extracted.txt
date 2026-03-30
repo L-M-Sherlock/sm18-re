@@ -1,0 +1,112 @@
+=== _DAT_008ae058 (R-factor divisor) ===
+  float10 = 0.0
+  double = 0.0
+  uint32 = 0x00000000
+
+=== _DAT_008ae05c (min log clamp) ===
+  float10 = 0.0
+
+=== _DAT_008ae013 (weight table) ===
+  first 40 bytes hex: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
+  as doubles (1825):
+    first 30: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000
+    last 10: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000
+    min=0.000000, max=0.000000, sum=0.000000
+    non-finite: 0
+
+  as float10:
+    first 30: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000
+
+
+### FUN_006914e0 (weighted sum, 344 bytes) ###
+
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+void FUN_006914e0(int param_1,int param_2,int param_3,double param_4,double *param_5,short param_6,
+                 int param_7,int param_8,int param_9)
+
+{
+  double dVar1;
+  uint uVar2;
+  uint uVar3;
+  uint extraout_ECX;
+  int extraout_EDX;
+  int iVar4;
+  undefined4 *in_FS_OFFSET;
+  float10 fVar5;
+  undefined4 uStack_4c;
+  undefined1 *puStack_48;
+  undefined1 *puStack_44;
+  short local_30;
+  ushort local_2e;
+  double local_24;
+  double local_1c;
+  
+  puStack_44 = &stack0xfffffffc;
+  puStack_48 = &LAB_0069162f;
+  uStack_4c = *in_FS_OFFSET;
+  *in_FS_OFFSET = &uStack_4c;
+  local_24 = 0.0;
+  if (param_6 != 0) {
+    local_30 = param_6;
+    local_2e = 1;
+    puStack_44 = &stack0xfffffffc;
+    do {
+      uVar2 = (uint)local_2e;
+      if (param_2 < (int)uVar2) {
+        uVar2 = thunk_FUN_004072dc();
+      }
+      uVar3 = (uint)local_2e;
+      iVar4 = param_1;
+      if (param_2 < (int)uVar3) {
+        uVar2 = thunk_FUN_004072dc();
+        uVar3 = extraout_ECX;
+        iVar4 = extraout_EDX;
+      }
+      fVar5 = (float10)*(double *)(iVar4 + uVar2 * 8) * (float10)*(double *)(param_1 + uVar3 * 8);
+      uVar2 = (uint)local_2e;
+      if (param_7 < (int)uVar2) {
+        uVar2 = thunk_FUN_004072dc();
+      }
+      local_24 = (double)(fVar5 * (float10)*(double *)(param_8 + uVar2 * 8) + (float10)local_24);
+      local_2e = local_2e + 1;
+      local_30 = local_30 + -1;
+    } while (local_30 != 0);
+  }
+  local_1c = 0.0;
+  if (param_6 != 0) {
+    local_30 = param_6;
+    local_2e = 1;
+    do {
+      uVar2 = (uint)local_2e;
+      if (param_9 < (int)uVar2) {
+        uVar2 = thunk_FUN_004072dc();
+      }
+      dVar1 = *(double *)(param_3 + uVar2 * 8);
+      uVar2 = (uint)local_2e;
+      if (param_2 < (int)uVar2) {
+        uVar2 = thunk_FUN_004072dc();
+      }
+      fVar5 = (float10)_DAT_00691660 * (float10)*(double *)(param_1 + uVar2 * 8);
+      uVar2 = (uint)local_2e;
+      if (param_7 < (int)uVar2) {
+        uVar2 = thunk_FUN_004072dc();
+      }
+      local_1c = (double)(fVar5 * (float10)*(double *)(param_8 + uVar2 * 8) *
+                          (float10)(param_4 - dVar1) + (float10)local_1c);
+      local_2e = local_2e + 1;
+      local_30 = local_30 + -1;
+    } while (local_30 != 0);
+  }
+  if (local_24 == 0.0) {
+    *(undefined4 *)param_5 = 0;
+    *(undefined4 *)((int)param_5 + 4) = 0;
+  }
+  else {
+    *param_5 = -local_1c / ((double)_DAT_00691660 * local_24);
+  }
+  *in_FS_OFFSET = uStack_4c;
+  return;
+}
+

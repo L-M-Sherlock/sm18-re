@@ -1,0 +1,151 @@
+xref to 0x8ae058: 0x008add53 READ
+Total xrefs to 0x8ae058: 1
+xref to 0x8ae05c: 0x008adf9e READ
+Total xrefs to 0x8ae05c: 1
+Total xrefs to 0x8ae013: 0
+xref to 0x69691660: 0x006915c3 READ
+xref to 0x69691660: 0x00691614 READ
+Total xrefs to 0x00691660: 2
+
+_DAT_00691660 as float10: 0.0
+
+
+### FUN_008af4fc (interval for SInc, 151 bytes) ###
+
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+void FUN_008af4fc(undefined1 param_1)
+
+{
+  undefined4 *in_FS_OFFSET;
+  undefined4 uStack_4c;
+  undefined1 *puStack_48;
+  undefined1 *puStack_44;
+  
+  puStack_44 = &stack0xfffffffc;
+  puStack_48 = &LAB_008af589;
+  uStack_4c = *in_FS_OFFSET;
+  *in_FS_OFFSET = &uStack_4c;
+  FUN_008b0620(param_1,1);
+  FUN_00407bd8();
+  *in_FS_OFFSET = uStack_4c;
+  return;
+}
+
+
+
+
+### FUN_008ae4bc (D-factor opt, 74 bytes) ###
+
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+void FUN_008ae4bc(void)
+
+{
+  return;
+}
+
+
+
+
+### FUN_008af988 (421 bytes) ###
+
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+void FUN_008af988(int param_1,undefined4 *param_2,undefined4 *param_3)
+
+{
+  longlong lVar1;
+  int iVar2;
+  int iVar3;
+  int iVar4;
+  int iVar5;
+  int iVar6;
+  uint uVar7;
+  undefined4 *in_FS_OFFSET;
+  float10 in_ST0;
+  float10 in_ST1;
+  float10 in_ST2;
+  float10 in_ST3;
+  float10 in_ST4;
+  float10 in_ST5;
+  float10 in_ST6;
+  float10 fVar8;
+  undefined4 uStack_44;
+  undefined1 *puStack_40;
+  undefined1 *puStack_3c;
+  byte local_22;
+  
+  puStack_3c = &stack0xfffffffc;
+  *param_2 = 0x70a3d70a;
+  param_2[1] = 0xbfc70a3d;
+  *param_3 = 0;
+  param_3[1] = 0x40040000;
+  puStack_40 = &LAB_008afb26;
+  uStack_44 = *in_FS_OFFSET;
+  *in_FS_OFFSET = &uStack_44;
+  iVar2 = FUN_00407180(0x3910);
+  iVar3 = FUN_00407180(0x3910);
+  iVar4 = FUN_00407180(0x3910);
+  iVar5 = FUN_00407180(0x3910);
+  local_22 = 1;
+  do {
+    iVar6 = local_22 - 1;
+    if (SBORROW4((uint)local_22,1)) {
+      iVar6 = thunk_FUN_004072dc();
+    }
+    *(double *)(iVar2 + (uint)local_22 * 8) = (double)iVar6;
+    uVar7 = local_22 - 1;
+    if (0x13 < uVar7) {
+      uVar7 = thunk_FUN_004072dc();
+    }
+    lVar1 = (longlong)(int)(uVar7 + 1) * 5;
+    iVar6 = (int)lVar1;
+    if (iVar6 != lVar1) {
+      iVar6 = thunk_FUN_004072dc();
+    }
+    *(double *)(iVar3 + (uint)local_22 * 8) =
+         (double)((float)*(ushort *)(param_1 + 0x2f8 + iVar6 * 8) / _DAT_008afb54);
+    uVar7 = local_22 - 1;
+    if (0x13 < uVar7) {
+      uVar7 = thunk_FUN_004072dc();
+    }
+    lVar1 = (longlong)(int)(uVar7 + 1) * 5;
+    iVar6 = (int)lVar1;
+    if (iVar6 != lVar1) {
+      iVar6 = thunk_FUN_004072dc();
+    }
+    uVar7 = (uint)*(ushort *)(param_1 + 0x618 + iVar6 * 8);
+    iVar6 = uVar7 + 1;
+    if (SCARRY4(uVar7,1)) {
+      iVar6 = thunk_FUN_004072dc();
+    }
+    *(double *)(iVar4 + (uint)local_22 * 8) = (double)iVar6;
+    local_22 = local_22 + 1;
+  } while (local_22 != 0x15);
+  local_22 = 1;
+  do {
+    fVar8 = in_ST6;
+    FUN_00407b98();
+    *(double *)(iVar5 + (uint)local_22 * 8) = (double)in_ST0;
+    local_22 = local_22 + 1;
+    in_ST0 = in_ST1;
+    in_ST1 = in_ST2;
+    in_ST2 = in_ST3;
+    in_ST3 = in_ST4;
+    in_ST4 = in_ST5;
+    in_ST5 = in_ST6;
+    in_ST6 = fVar8;
+  } while (local_22 != 0x15);
+  FUN_00690cb0(iVar2,iVar5,iVar4,param_3,param_2,0x14);
+  FUN_0040719c(iVar5);
+  FUN_0040719c(iVar2);
+  FUN_0040719c(iVar3);
+  FUN_0040719c(iVar4);
+  *in_FS_OFFSET = uStack_44;
+  return;
+}
+

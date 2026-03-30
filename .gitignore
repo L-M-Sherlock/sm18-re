@@ -1,0 +1,57 @@
+# Compiled outputs
+__pycache__/
+*.pyc
+*.pyo
+*.swp
+
+# Ghidra project
+sm18-project/
+
+# Large binary
+sm18.exe
+
+# User collection data
+collections/
+
+# sm8opt.dat (user-specific optimization state)
+sm8opt.dat
+
+# Intermediate scripts (anything that's not the final deliverable)
+*.java
+SM18*.py
+SM18*.sh
+Dockerfile
+analyze_sm18.py
+decode_constants.py
+decompile_binning*.py
+dump_*.sh
+dump_*.py
+export_sm18.py
+extract_floats.py
+extract_tables.py
+parse_sm8opt*.py
+compare_sm8opt.py
+sm18_decompile.py
+sm18_dump_run.sh
+sm18_memdump.py
+sm18_pyghidra.py
+sm18_matrix_readers.py
+sm18_sinc_indexing.py
+sm8opt_full.py
+
+# Superseded files
+ANALYSIS_SUMMARY.md
+COMPLETION_SUMMARY.md
+README_FINAL.md
+all_data_symbols.txt
+all_functions.txt
+sm18_algorithm_reconstruction.md
+sm18_exact_algorithm.md
+sm18_final_algorithm.py
+sm18_final_analysis.md
+sm18_implementation.py
+sm18_quantile_analysis.md
+sm18_quantiles.txt
+sm18_strings_all.txt
+sm18_verified_algorithm.py
+sm18_verified_analysis.md

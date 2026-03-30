@@ -1,0 +1,16 @@
+### FUN_00407bcc @ 00407bcc (12 bytes) ###
+
+undefined4 FUN_00407bcc(void)
+
+{
+  float10 in_ST0;
+  undefined4 local_8;
+  
+  local_8 = (undefined4)(longlong)ROUND(in_ST0);
+  return local_8;
+}
+
+
+
+### Xrefs to _DAT_008b3814 ###
+  from: 008b36f7 (READ)

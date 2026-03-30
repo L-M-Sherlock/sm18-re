@@ -1,0 +1,149 @@
+  008adc00: MOV dword ptr FS:[EAX],EDX
+  008adc03: JMP 0x008adc25
+  008adc05: JMP 0x0040ba20
+  008adc25: MOV AL,byte ptr [EBP + -0x3]
+  008adc28: POP EDI
+  008adc29: POP ESI
+  008adc2a: POP EBX
+  008adc2b: MOV ESP,EBP
+  008adc2d: POP EBP
+  008adc2e: RET 0x8
+  008adc74: PUSH EBP
+  008adc75: MOV EBP,ESP
+  008adc77: PUSH EAX
+  008adc78: MOV EAX,0xe
+  008adc7d: ADD ESP,0xfffff004
+  008adc83: PUSH EAX
+  008adc84: DEC EAX
+  008adc85: JNZ 0x008adc7d
+  008adc87: MOV EAX,dword ptr [EBP + -0x4]
+  008adc8a: ADD ESP,0xfffffb9c
+  008adc90: PUSH EBX
+  008adc91: PUSH ESI
+  008adc92: PUSH EDI
+  008adc93: MOV byte ptr [EBP + -0x6],CL
+  008adc96: MOV byte ptr [EBP + -0x5],DL
+  008adc99: MOV dword ptr [EBP + -0x4],EAX
+  008adc9c: MOV EAX,dword ptr [EBP + 0x8]
+  008adc9f: MOV dword ptr [EAX],0x1eb851ec
+  008adca5: MOV dword ptr [EAX + 0x4],0x3fb1eb85
+  008adcac: XOR EAX,EAX
+  008adcae: PUSH EBP
+  008adcaf: PUSH 0x8ae028
+  008adcb4: PUSH dword ptr FS:[EAX]
+  008adcb7: MOV dword ptr FS:[EAX],ESP
+  008adcba: XOR EAX,EAX
+  008adcbc: MOV AL,byte ptr [EBP + -0x5]
+  008adcbf: DEC EAX
+  008adcc0: CMP EAX,0x13
+  008adcc3: JBE 0x008adcca
+  008adcc5: CALL 0x0040a4b4
+  008adcca: INC EAX
+  008adccb: IMUL EAX,EAX,0x5
+  008adcce: JNO 0x008adcd5
+  008adcd0: CALL 0x0040a4bc
+  008adcd5: MOV EDX,dword ptr [EBP + -0x4]
+  008adcd8: LEA EAX,[EDX + EAX*0x8]
+  008adcdb: XOR EDX,EDX
+  008adcdd: MOV DL,byte ptr [EBP + -0x6]
+  008adce0: DEC EDX
+  008adce1: CMP EDX,0x13
+  008adce4: JBE 0x008adceb
+  008adce6: CALL 0x0040a4b4
+  008adceb: INC EDX
+  008adcec: CMP word ptr [EAX + EDX*0x2 + 0x616],0x0
+  008adcf5: JNZ 0x008add6e
+  008adcf7: PUSH 0x3ffe
+  008adcfc: PUSH 0xe6666666
+  008add01: PUSH 0x66666666
+  008add06: CALL 0x00407b98
+  008add0b: FCHS
+  008add0d: XOR EAX,EAX
+  008add0f: MOV AL,byte ptr [EBP + -0x5]
+  008add12: DEC EAX
+  008add13: CMP EAX,0x13
+  008add16: JBE 0x008add1d
+  008add18: CALL 0x0040a4b4
+  008add1d: INC EAX
+  008add1e: IMUL EAX,EAX,0x5
+  008add21: JNO 0x008add28
+  008add23: CALL 0x0040a4bc
+  008add28: MOV EDX,dword ptr [EBP + -0x4]
+  008add2b: LEA EAX,[EDX + EAX*0x8]
+  008add2e: XOR EDX,EDX
+  008add30: MOV DL,byte ptr [EBP + -0x6]
+  008add33: DEC EDX
+  008add34: CMP EDX,0x13
+  008add37: JBE 0x008add3e
+  008add39: CALL 0x0040a4b4
+  008add3e: INC EDX
+  008add3f: MOVZX EAX,word ptr [EAX + EDX*0x2 + 0x2f6]
+  008add47: MOV dword ptr [EBP + 0xffff1b9c],EAX
+  008add4d: FILD dword ptr [EBP + 0xffff1b9c]
+  008add53: FDIV float ptr [0x008ae058]
+  008add59: FDIVP
+  008add5b: MOV EAX,dword ptr [EBP + 0x8]
+  008add5e: FSTP double ptr [EAX]
+  008add60: WAIT
+  008add61: XOR EAX,EAX
+  008add63: POP EDX
+  008add64: POP ECX
+  008add65: POP ECX
+  008add66: MOV dword ptr FS:[EAX],EDX
+  008add69: JMP 0x008ae04e
+  008add6e: MOV byte ptr [EBP + -0x7],0x1
+  008add72: MOV CL,byte ptr [EBP + -0x7]
+  008add75: MOV DL,byte ptr [EBP + -0x6]
+  008add78: MOV AL,byte ptr [EBP + -0x5]
+  008add7b: CALL 0x008af4fc
+  008add80: XOR EAX,EAX
+  008add82: MOV AL,byte ptr [EBP + -0x7]
+  008add85: FSTP double ptr [EBP + EAX*0x8 + 0xffffc6d0]
+  008add8c: WAIT
+  008add8d: XOR EAX,EAX
+  008add8f: MOV AL,byte ptr [EBP + -0x5]
+  008add92: DEC EAX
+  008add93: CMP EAX,0x13
+  008add96: JBE 0x008add9d
+  008add98: CALL 0x0040a4b4
+  008add9d: INC EAX
+  008add9e: IMUL EAX,EAX,0x32
+  008adda1: JNO 0x008adda8
+  008adda3: CALL 0x0040a4bc
+  008adda8: MOV EDX,dword ptr [EBP + -0x4]
+  008addab: LEA EAX,[EDX + EAX*0x8]
+  008addae: XOR EDX,EDX
+  008addb0: MOV DL,byte ptr [EBP + -0x6]
+  008addb3: DEC EDX
+  008addb4: CMP EDX,0x13
+  008addb7: JBE 0x008addbe
+  008addb9: CALL 0x0040a4b4
+  008addbe: INC EDX
+  008addbf: IMUL EDX,EDX,0x5
+  008addc2: JNO 0x008addc9
+  008addc4: CALL 0x0040a4bc
+  008addc9: LEA EAX,[EAX + EDX*0x4]
+  008addcc: XOR EDX,EDX
+  008addce: MOV DL,byte ptr [EBP + -0x7]
+  008addd1: DEC EDX
+  008addd2: CMP EDX,0x13
+  008addd5: JBE 0x008adddc
+  008addd7: CALL 0x0040a4b4
+  008adddc: INC EDX
+  008adddd: MOVZX EAX,byte ptr [EAX + EDX*0x1 + 0x2747]
+  008adde5: MOV dword ptr [EBP + 0xffff1b9c],EAX
+  008addeb: FILD dword ptr [EBP + 0xffff1b9c]
+  008addf1: XOR EAX,EAX
+  008addf3: MOV AL,byte ptr [EBP + -0x7]
+  008addf6: FSTP double ptr [EBP + EAX*0x8 + 0xffff54b0]
+  008addfd: WAIT
+  008addfe: XOR EAX,EAX
+  00407b98: PUSH EBP
+  00407b99: MOV EBP,ESP
+  00407b9b: FLD extended double ptr [EBP + 0x8]
+  00407b9e: FLDLN2
+  00407ba0: FXCH
+  00407ba2: FYL2X
+  00407ba4: WAIT
+  00407ba5: POP EBP
+  00407ba6: RET 0xc

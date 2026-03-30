@@ -1,0 +1,83 @@
+### FUN_008b0520 @ 008b0520 (99 bytes) ###
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+void FUN_008b0520(byte param_1)
+
+{
+  undefined4 *in_FS_OFFSET;
+  undefined4 uStack_30;
+  undefined1 *puStack_2c;
+  undefined1 *puStack_28;
+  
+  puStack_28 = &stack0xfffffffc;
+  puStack_2c = &LAB_008b0579;
+  uStack_30 = *in_FS_OFFSET;
+  *in_FS_OFFSET = &uStack_30;
+  if (SBORROW4((uint)param_1,1)) {
+    thunk_FUN_004072dc();
+  }
+  *in_FS_OFFSET = uStack_30;
+  return;
+}
+
+
+
+### FUN_008b03a8 @ 008b03a8 (220 bytes) ###
+
+/* WARNING: Removing unreachable block (ram,0x008b0435) */
+/* WARNING: Removing unreachable block (ram,0x008b0443) */
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+void FUN_008b03a8(byte param_1)
+
+{
+  ulonglong uVar1;
+  longlong lVar2;
+  undefined1 *puVar3;
+  int iVar4;
+  uint uVar5;
+  int iVar6;
+  int extraout_EDX;
+  int extraout_EDX_00;
+  undefined4 *in_FS_OFFSET;
+  undefined4 uStack_40;
+  undefined1 *puStack_3c;
+  undefined1 *puStack_38;
+  
+  puStack_38 = &stack0xfffffffc;
+  puStack_3c = &LAB_008b047a;
+  uStack_40 = *in_FS_OFFSET;
+  *in_FS_OFFSET = &uStack_40;
+  iVar4 = param_1 - 1;
+  puVar3 = &stack0xfffffffc;
+  if (SBORROW4((uint)param_1,1)) {
+    iVar4 = thunk_FUN_004072dc();
+    puVar3 = puStack_38;
+  }
+  puStack_38 = puVar3;
+  iVar6 = param_1 - 1;
+  if (SBORROW4((uint)param_1,1)) {
+    iVar4 = thunk_FUN_004072dc();
+    iVar6 = extraout_EDX;
+  }
+  uVar1 = (longlong)iVar4 * (longlong)iVar6;
+  if ((longlong)(int)uVar1 != uVar1) {
+    uVar5 = thunk_FUN_004072dc((int)uVar1,(int)(uVar1 >> 0x20));
+    uVar1 = (ulonglong)uVar5;
+  }
+  iVar6 = (int)uVar1;
+  iVar4 = param_1 - 1;
+  if (SBORROW4((uint)param_1,1)) {
+    iVar6 = thunk_FUN_004072dc();
+    iVar4 = extraout_EDX_00;
+  }
+  lVar2 = (longlong)iVar6 * (longlong)iVar4;
+  if ((int)lVar2 != lVar2) {
+    thunk_FUN_004072dc((int)lVar2,(int)((ulonglong)lVar2 >> 0x20));
+  }
+  *in_FS_OFFSET = uStack_40;
+  return;
+}
+
+

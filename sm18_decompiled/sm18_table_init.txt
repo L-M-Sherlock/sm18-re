@@ -1,0 +1,97 @@
+### FUN_008ad19c @ 008ad19c (97 bytes) ###
+// Contains WRITE/READ xref to DAT_00ca4544 at 0x008ad1e2
+
+void FUN_008ad19c(void)
+
+{
+  undefined4 *in_FS_OFFSET;
+  undefined4 uStack_1c;
+  undefined1 *puStack_18;
+  undefined1 *puStack_14;
+  
+  puStack_14 = &stack0xfffffffc;
+  puStack_18 = &LAB_008ad1f8;
+  uStack_1c = *in_FS_OFFSET;
+  *in_FS_OFFSET = &uStack_1c;
+  if ((DAT_00ca4544 == 0) || (DAT_00ca4548 == 0)) {
+    puStack_14 = &stack0xfffffffc;
+    FUN_00b2b8f8(L"Optimization memory must be allocated before calling FreeOptimizationRecord");
+    *in_FS_OFFSET = uStack_1c;
+  }
+  else {
+    FUN_0040719c(DAT_00ca4548);
+    DAT_00ca4544 = 0;
+    DAT_00ca4548 = 0;
+    *in_FS_OFFSET = uStack_1c;
+  }
+  return;
+}
+
+
+
+### FUN_008ad068 @ 008ad068 (98 bytes) ###
+// Contains WRITE/READ xref to DAT_00ca4544 at 0x008ad0a1
+
+void FUN_008ad068(int param_1)
+
+{
+  undefined4 *in_FS_OFFSET;
+  undefined4 uStack_20;
+  undefined1 *puStack_1c;
+  undefined1 *puStack_18;
+  
+  puStack_18 = &stack0xfffffffc;
+  if ((DAT_00ca4544 == 0) && (DAT_00ca4548 == 0)) {
+    puStack_1c = &LAB_008ad0c4;
+    uStack_20 = *in_FS_OFFSET;
+    *in_FS_OFFSET = &uStack_20;
+    DAT_00ca4544 = param_1;
+    DAT_00ca4548 = FUN_00407180(0x49bc);
+    FUN_008acfa8();
+    *in_FS_OFFSET = uStack_20;
+  }
+  else {
+    puStack_18 = (undefined1 *)0x8ad08e;
+    FUN_00b2b8f8(L"Optimization memory already allocated");
+  }
+  return;
+}
+
+
+
+### FUN_008acfa8 @ 008acfa8 (63 bytes) ###
+// Contains WRITE/READ xref to DAT_00ca4544 at 0x008acfc2
+
+void FUN_008acfa8(void)
+
+{
+  undefined4 *in_FS_OFFSET;
+  undefined4 uStack_1c;
+  undefined1 *puStack_18;
+  undefined1 *puStack_14;
+  
+  puStack_14 = &stack0xfffffffc;
+  puStack_18 = &LAB_008acfe2;
+  uStack_1c = *in_FS_OFFSET;
+  *in_FS_OFFSET = &uStack_1c;
+  FUN_00407420(DAT_00ca4544,DAT_00ca4548,0x49bc);
+  DAT_00ca4558 = 0;
+  *in_FS_OFFSET = uStack_1c;
+  return;
+}
+
+
+
+### FUN_00407bcc @ 00407bcc ###
+
+undefined4 FUN_00407bcc(void)
+
+{
+  float10 in_ST0;
+  undefined4 local_8;
+  
+  local_8 = (undefined4)(longlong)ROUND(in_ST0);
+  return local_8;
+}
+
+

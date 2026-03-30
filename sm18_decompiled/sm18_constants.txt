@@ -1,0 +1,460 @@
+SM-18 Algorithm Float Constants Extraction
+==========================================
+
+Total functions to analyze: 55
+
+============================================================
+FUN_007e20ec @ 007e20ec
+  Size: 1880 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_007e44e4 @ 007e44e4
+  Size: 1713 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_007e3fa4 @ 007e3fa4
+  Size: 306 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_007e94c4 @ 007e94c4
+  Size: 1008 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_007f981c @ 007f981c
+  Size: 1917 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_008b2608 @ 008b2608
+  Size: 574 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_007e1d80 @ 007e1d80
+  Size: 817 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_007e3230 @ 007e3230
+  Size: 1544 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_007e3840 @ 007e3840
+  Size: 1057 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_007e3c90 @ 007e3c90
+  Size: 783 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_007e40d8 @ 007e40d8
+  Size: 306 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_007e429c @ 007e429c
+  Size: 253 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_007e5960 @ 007e5960
+  Size: 495 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_007e61ec @ 007e61ec
+  Size: 38 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_007e62a8 @ 007e62a8
+  Size: 376 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_007e6424 @ 007e6424
+  Size: 189 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_007e64f0 @ 007e64f0
+  Size: 189 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_007e65bc @ 007e65bc
+  Size: 299 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_007e67cc @ 007e67cc
+  Size: 287 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_007e6a0c @ 007e6a0c
+  Size: 287 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_007e6c28 @ 007e6c28
+  Size: 287 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_007e6e30 @ 007e6e30
+  Size: 289 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_007e7068 @ 007e7068
+  Size: 289 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_007e72a0 @ 007e72a0
+  Size: 289 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_007e74d0 @ 007e74d0
+  Size: 289 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_007e76d0 @ 007e76d0
+  Size: 644 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_007e7998 @ 007e7998
+  Size: 644 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_007e7c60 @ 007e7c60
+  Size: 663 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_007e7f38 @ 007e7f38
+  Size: 722 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_007e824c @ 007e824c
+  Size: 621 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_007e84fc @ 007e84fc
+  Size: 755 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_007e8830 @ 007e8830
+  Size: 746 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_007e8b5c @ 007e8b5c
+  Size: 884 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_007e8edc @ 007e8edc
+  Size: 1154 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_007e936c @ 007e936c
+  Size: 197 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_007e997c @ 007e997c
+  Size: 289 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_007e9b90 @ 007e9b90
+  Size: 585 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_007e9e08 @ 007e9e08
+  Size: 63 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_007e9e54 @ 007e9e54
+  Size: 63 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_007e9ecc @ 007e9ecc
+  Size: 28 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_007e9ee8 @ 007e9ee8
+  Size: 730 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_007f9628 @ 007f9628
+  Size: 451 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_007f97ec @ 007f97ec
+  Size: 45 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_008b2258 @ 008b2258
+  Size: 834 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_008b2900 @ 008b2900
+  Size: 1391 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_008b2ef4 @ 008b2ef4
+  Size: 149 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_008b30d8 @ 008b30d8
+  Size: 864 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_008b3604 @ 008b3604
+  Size: 488 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_008b3874 @ 008b3874
+  Size: 139 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_008b3990 @ 008b3990
+  Size: 478 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_008b3c20 @ 008b3c20
+  Size: 136 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_008b3d28 @ 008b3d28
+  Size: 46 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_008b3d58 @ 008b3d58
+  Size: 45 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_008b3d98 @ 008b3d98
+  Size: 101 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+FUN_008b3e0c @ 008b3e0c
+  Size: 318 bytes
+
+  (no interesting float constants in instructions)
+
+  (decompilation failed)
+
+============================================================
+Functions analyzed: 55
+
+============================================================
+Scanning .rdata for S quantile boundary arrays:
+
+  Possible S bounds @ 0x007b6cb0:
+    Values: ['4.89e-311', '3.311e-309', '2.441e-306', '2.441e-306', '2.441e-306', '2.441e-306', '2.441e-306', '2.442e-306', '2.442e-306', '2.442e-306', '2.442e-306', '2.442e-306', '2.442e-306', '2.442e-306', '2.442e-306', '2.442e-306', '2.443e-306', '2.443e-306', '2.443e-306', '2.443e-306']
+    Avg ratio: 43.2664 (log-spaced 1..3325 would be 1.5323)
+
+  Possible S bounds @ 0x007b6cb8:
+    Values: ['3.311e-309', '2.441e-306', '2.441e-306', '2.441e-306', '2.441e-306', '2.441e-306', '2.442e-306', '2.442e-306', '2.442e-306', '2.442e-306', '2.442e-306', '2.442e-306', '2.442e-306', '2.442e-306', '2.442e-306', '2.443e-306', '2.443e-306', '2.443e-306', '2.443e-306', '2.443e-306']
+    Avg ratio: 39.7557 (log-spaced 1..3325 would be 1.5323)
+
+Scanning for D/R quantile boundaries (linear 0..1 or 0.05 step):
