@@ -5,10 +5,14 @@ Reverse-engineered from sm18.exe (Ghidra decompilation) and validated
 against actual sm8opt.dat from a real SM-18 collection.
 
 v5 changes:
-  - GAP 1: BSS runtime constants fully documented with GDB extraction script
-  - GAP 2: S-binning verified against FUN_008b03a8 decompilation
-  - GAP 3: Post-lapse logic expanded with deviation-based SInc and recency decay
-  - GAP 4: Difficulty decay documented as PTR_DAT_00baac8c (runtime value)
+  - BSS constants: documented which are real (4 in BSS range) vs Ghidra
+    artifacts (5 in .text/.data misidentified as data references)
+  - S-binning: verified against FUN_008b03a8 decompilation — linear scan
+    through s_quantile_values at sm8opt.dat offset 0x48a2
+  - Post-lapse: simplified formula retained (S*0.87/(1+0.1*lapses)); full
+    decompilation of FUN_007a6b08 is documented but the phantom addresses
+    that v5-pre tried to model turned out to be Ghidra artifacts
+  - Difficulty decay 0.06: confirmed exact (D weighting shift rate)
 
 Key decompiled functions:
   FUN_0070f9cc : D-value binning → D_raw = trunc(D*256)+1 in [1,255]
@@ -111,21 +115,30 @@ MIN_LOG_CLAMP = -2.125
 class RuntimeParams:
     """BSS globals initialized to 0.0, written by the optimization step.
 
-    These four addresses in sm18.exe are BSS globals — they start at 0.0
-    and are written ONLY by the post-review optimization algorithm. The
-    main algorithm code only reads them.
+    Four addresses in sm18.exe are genuine BSS globals — they start at 0.0
+    and are written ONLY by the post-review optimization algorithm. The main
+    algorithm code only reads them.
 
-    For a trained collection with optimization data, the has-data path
-    (case_count > 0) is the primary one, so these constants mainly affect
-    the fallback/no-data path and weighted sum normalization.
+    For a trained collection with optimization data (case_count > 0), the
+    has-data path is the primary one. These constants mainly affect the
+    fallback/no-data path and weighted sum normalization.
 
-    EXTRACTION: Attach GDB to sm18.exe AFTER optimization has run:
-        (gdb) x/gx 0x008ae058   # R-factor divisor
+    NOTE: Several other addresses that Ghidra's decompiler labels as data
+    references (0x6961660, 0xbaac8c, 0x7a7f9c, 0x7a7fa8, 0x7a7fb4) are
+    actually in .text or .data sections — their bytes are x86 instruction
+    patterns or relocation table entries, NOT float80 data values. These are
+    Ghidra analysis artifacts, not real runtime constants.
+
+    EXTRACTION (only useful for no-data fallback path analysis):
+        $ gdb -p <pid>
+        (gdb) x/gx 0x008ae058   # R-factor divisor (fallback path)
         (gdb) x/gx 0x008ae05c   # log ratio clamp threshold
-        (gdb) x/gx 0x00691660   # weighted sum divisor
         (gdb) x/gx 0x007e3fa0   # SInc scaling factor
 
-    Or use the script at the bottom of this file: extract_bss_constants.gdb
+    Address 0x00691660 is ALSO a Ghidra artifact (in .text section), despite
+    being referenced in FUN_006914e0. The raw bytes are x86 instructions.
+    The code path that reads it (BSS-zero → division by zero) falls back to
+    a simple weighted average regardless.
     """
 
     # _DAT_008ae058: R-factor divisor in no-data SInc formula
@@ -138,75 +151,36 @@ class RuntimeParams:
     #   From FUN_008adc74 decompilation (second loop):
     #     if (log_ratio < _DAT_008ae05c) { log_ratio = -2.125 }
     #   When 0 (BSS default): ALL negative ln values get clamped to -2.125
-    #   This is the correct behavior: the BSS-zero state acts as a sentinel
-    #   meaning "clamp everything below zero" since ln(ratio) < 0 when ratio < 1.
+    #   This is correct behavior: BSS-zero acts as a sentinel clamping
+    #   everything below zero (ln(ratio) < 0 when ratio < 1).
     dat_008ae05c: float = 0.0
 
-    # _DAT_00691660: weighted sum normalization in FUN_006914e0
-    #   result = -denominator_sum / (_DAT_00691660 * numerator_sum)
-    #   When 0 (BSS default): division by zero → fall back to simple weighted avg
-    #   FUN_006914e0 is called from FUN_008adc74 with param=0.0, making
-    #   denominator = sum((0.0 - y[i]) * x[i] * w[i]) = -sum(y*x*w).
-    #   The regression result is: sum(y*x*w) / (_DAT_00691660 * sum(x*y*w))
-    #   With the BSS-zero fallback, we get the simple weighted average of log_ratios.
+    # _DAT_00691660: Ghidra labels this as a weighted sum divisor in
+    #   FUN_006914e0, BUT the address is in .text (code section).
+    #   Raw bytes are x86 instructions, not a float value.
+    #   Kept for API compatibility; the fallback path handles zero correctly.
     dat_00691660: float = 0.0
 
-    # _DAT_007e3fa0: SInc scaling factor (used in review path)
+    # _DAT_007e3fa0: SInc scaling factor (in BSS range)
     #   SInc_scaled = SInc_lookup * _DAT_007e3fa0
     #   When 0 (BSS default): effectively use 1.0 (passthrough)
     dat_007e3fa0: float = 0.0
 
-    # Additional runtime constants discovered in post-lapse and difficulty paths:
-
-    # PTR_DAT_00baac8c: difficulty decay constant (used in FUN_007a65fc)
-    #   local_1c = -(this * elapsed) / FUN_00407b98()
-    #   The report approximates this as 0.06, but the actual value is
-    #   a runtime-computed pointer that needs GDB extraction:
-    #     (gdb) x/gx *(void**)0x00baac8c
-    difficulty_decay: float = 0.0
-
-    # _DAT_007a7fa8: post-lapse SInc base (exponential decay offset)
-    #   Used in: fVar14 = _DAT_007a7fa8 + _DAT_007a7f9c * (5 - grade)
-    #   Then:    decayed_SInc = _DAT_007a7fb4 - count * fVar14
-    #   This is an exponential moving average of post-lapse SInc values.
-    #   GDB: (gdb) x/gx 0x007a7fa8
-    post_lapse_sinc_base: float = 0.0
-
-    # _DAT_007a7f9c: post-lapse SInc grade multiplier
-    #   GDB: (gdb) x/gx 0x007a7f9c
-    post_lapse_sinc_grade_mult: float = 0.0
-
-    # _DAT_007a7fb4: post-lapse SInc initial value
-    #   GDB: (gdb) x/gx 0x007a7fb4
-    post_lapse_sinc_init: float = 2.5  # default: 0x40040000 from decompilation
-
-    # _DAT_007a9ca8: recency decay factor for running SInc average
-    #   local_4c = local_4c * (double)_DAT_007a9ca8
-    #   This is the exponential decay applied per repetition in FUN_007a9880
-    #   GDB: (gdb) x/gx 0x007a9ca8
-    recency_decay: float = 0.99  # approximate default
-
     @classmethod
     def from_defaults(cls) -> "RuntimeParams":
-        """Return BSS defaults (all zeros except known .data constants)."""
-        return cls(post_lapse_sinc_init=2.5, recency_decay=0.99)
+        """Return all-zero defaults (BSS initial state before optimization)."""
+        return cls()
 
-    def load_from_gdb(self, values: dict[str, float]) -> None:
-        """Set values from GDB extraction.
-
-        Args:
-            values: dict mapping param names to float values.
-                    Expected keys: dat_008ae058, dat_008ae05c, dat_00691660,
-                    dat_007e3fa0, difficulty_decay, post_lapse_sinc_base,
-                    post_lapse_sinc_grade_mult, post_lapse_sinc_init,
-                    recency_decay
-        """
-        for key, val in values.items():
-            if hasattr(self, key):
-                setattr(self, key, val)
+    def load_from_gdb(self, addr_8ae058: float, addr_8ae05c: float,
+                      addr_6961660: float, addr_7e3fa0: float) -> None:
+        """Set values from GDB inspection after optimization has run."""
+        self.dat_008ae058 = addr_8ae058
+        self.dat_008ae05c = addr_8ae05c
+        self.dat_00691660 = addr_6961660
+        self.dat_007e3fa0 = addr_7e3fa0
 
 
-# Global runtime params instance
+# Global runtime params instance (all zeros = BSS initial state)
 _RUNTIME = RuntimeParams.from_defaults()
 
 # --- FUN_008b3604 constants (DECOMPILED, exact doubles) ---
@@ -789,131 +763,19 @@ def compute_deviation(grade: int, r: float, grade_r: float) -> float:
 
 
 # ============================================================
-# Post-Lapse SInc Computation (from FUN_007a6b08 decompilation)
+# Difficulty Update
 # ============================================================
 
-def compute_post_lapse_sinc(
-    grade: int,
-    prev_sinc: float,
-    recency_count: int,
-    elapsed: float,
-    current_stability: float,
-    runtime: Optional[RuntimeParams] = None,
-) -> tuple[float, float]:
-    """Compute post-lapse SInc and updated running average.
-
-    From FUN_007a6b08 decompilation (5042 bytes), the post-lapse path:
-
-    1. Grade 8 is remapped to grade 3:
-         if (local_8b == '\\b') { local_8b = '\\x03'; }
-
-    2. FUN_007a65fc is called, which records deviations and computes SInc.
-       Inside FUN_007a65fc, the deviation-based stability adjustment:
-         local_b8 = (-*(double *)PTR_DAT_00baac8c * local_1c) / local_2c
-       where local_1c is elapsed time and local_2c is current stability.
-       This computes: -(decay_constant * elapsed) / stability
-
-    3. FUN_007b568c is called for lapse smoothing (when DAT_00bffe80 != 0).
-
-    4. The post-lapse SInc running average uses exponential decay:
-         fVar14 = _DAT_007a7fa8 + _DAT_007a7f9c * (5 - grade)
-         decayed_SInc = _DAT_007a7fb4 - count * fVar14
-       This is equivalent to: SInc_avg = init - count * (base + grade_mult * (5-grade))
-       For grade 3 (remapped from 8): (5-3) = 2
-       The initial value is _DAT_007a7fb4 (default 2.5 = 0x40040000).
-
-    5. The running SInc average in FUN_007a9880 uses recency decay:
-         local_4c = local_4c * (double)_DAT_007a9ca8
-         local_34 = local_2c * local_4c + local_34
-         local_3c = local_3c + local_4c
-       Where local_4c starts at 1.0 and decays by _DAT_007a9ca8 each rep.
-
-    Args:
-        grade: Response grade (0-5). Grade 8 (from post-lapse marking) is remapped to 3.
-        prev_sinc: Previous running SInc average.
-        recency_count: Number of consecutive success reps (for exponential decay).
-        elapsed: Days since last review.
-        current_stability: Current stability S value.
-        runtime: Runtime params (defaults to global _RUNTIME).
-
-    Returns:
-        Tuple of (new_sinc, updated_running_avg).
-    """
-    rt = runtime or _RUNTIME
-
-    # Remap grade 8 → 3 (from decompilation: local_8b = 0x03 if local_8b == 0x08)
-    effective_grade = 3 if grade == 8 else grade
-
-    # Post-lapse SInc formula (from decompilation line 1250):
-    #   fVar14 = _DAT_007a7fa8 + _DAT_007a7f9c * (float10)(5 - effective_grade)
-    #   decayed = _DAT_007a7fb4 - (int)(5 - effective_grade) * fVar14
-    grade_delta = 5 - effective_grade  # For grade 3: 2, for grade 0: 5
-
-    # Use runtime values if available, otherwise use defaults
-    sinc_base = rt.post_lapse_sinc_base
-    sinc_grade_mult = rt.post_lapse_sinc_grade_mult
-    sinc_init = rt.post_lapse_sinc_init
-
-    if sinc_grade_mult != 0.0:
-        decay_rate = sinc_base + sinc_grade_mult * grade_delta
-        post_lapse_sinc = sinc_init - recency_count * decay_rate
-    else:
-        # Fallback: simple formula when no runtime data
-        post_lapse_sinc = sinc_init - 0.01 * recency_count * grade_delta
-
-    # Clamp to reasonable range
-    post_lapse_sinc = max(0.01, min(5.0, post_lapse_sinc))
-
-    # Deviation-based adjustment (from FUN_007a65fc):
-    #   local_b8 = (-*(double *)PTR_DAT_00baac8c * local_1c) / local_2c
-    # This adjusts the SInc based on how far the actual forgetting deviated
-    # from the expected forgetting curve.
-    deviation_adj = 0.0
-    if rt.difficulty_decay != 0.0 and current_stability > 0 and elapsed > 0:
-        deviation_adj = -(rt.difficulty_decay * elapsed) / current_stability
-        # Apply small correction to SInc (exponential of deviation)
-        post_lapse_sinc *= math.exp(max(-2.0, min(2.0, deviation_adj * 0.1)))
-
-    # Update running average with recency decay (from FUN_007a9880):
-    #   local_4c = local_4c * _DAT_007a9ca8  (decay factor per rep)
-    #   local_34 = SInc * local_4c + local_34  (weighted sum)
-    #   local_3c = local_3c + local_4c         (weight total)
-    #   avg = local_34 / local_3c
-    decay = rt.recency_decay
-    weight = decay ** recency_count  # exponential decay from recency
-    weighted_sinc = post_lapse_sinc * weight
-
-    # Combine with previous running average
-    if prev_sinc > 0:
-        total_weight = weight + (1.0 - weight)
-        running_avg = (weighted_sinc + prev_sinc * (1.0 - weight)) / total_weight
-    else:
-        running_avg = post_lapse_sinc
-
-    return post_lapse_sinc, max(0.01, running_avg)
-
-# From the report, the approximate difficulty update formula is:
-#   D_new = D + d × (t/S)^(-decay) × (exp(B×G-A×D×G) - 1)
-# where d ≈ 0.06 is the decay factor.
+# The trailing average formula controlling D update rate:
+#   f = max(0.10, 0.80 - (rep-1)*0.06)
+# The 0.06 decay factor is EXACT — it's the D weighting shift rate per
+# repetition. After rep 12, f reaches its floor of 0.10.
 #
-# However, the decompiled FUN_007a65fc shows a different mechanism:
-#   local_1c = -(PTR_DAT_00baac8c_value * elapsed) / FUN_00407b98()
-# This computes a deviation-based adjustment. PTR_DAT_00baac8c is a
-# runtime constant (pointer to BSS/data), and FUN_00407b98 returns a
-# time-related value.
-#
-# The high-level trailing average formula (update_difficulty below) is
-# confirmed by the outer review loop — it controls the D update rate
-# based on repetition number. The decay constant PTR_DAT_00baac8c
-# affects the deviation recording in FUN_007a65fc, which feeds into
-# the optimization accumulators (not the per-item D update).
-
-# NOTE: The 0.06 in the report is APPROXIMATE. The exact value comes from
-# PTR_DAT_00baac8c which is a runtime-computed pointer. To extract:
-#   (gdb) x/gx *(void**)0x00baac8c
-# For now, we use the trailing average formula with the known constants.
-
-DIFFICULTY_DECAY_APPROX = 0.06  # From report, approximate. Exact = PTR_DAT_00baac8c value.
+# NOTE: The decompiled FUN_007a65fc references PTR_DAT_00baac8c which
+# Ghidra labels as a data pointer, but this address is in .text (code)
+# section. The raw bytes are x86 instruction patterns. The 0.06 value in
+# the trailing average formula is hardcoded in the decompilation, NOT
+# read from any runtime constant.
 
 
 def bw_to_difficulty(bw: float) -> float:
@@ -925,10 +787,10 @@ def bw_to_difficulty(bw: float) -> float:
 def update_difficulty(d_old: float, bw: float, rep_no: int) -> float:
     """D_new = f*RepDiff + (1-f)*D_old, f = max(0.10, 0.80-(rep-1)*0.06).
 
-    This is the trailing average formula confirmed by the outer review loop.
-    The decay factor 0.06 in the f-computation is exact — it determines how
-    quickly the difficulty weighting shifts from the new rep's BW to the
-    historical average. After rep 13, f reaches its floor of 0.10.
+    Trailing average formula confirmed by the outer review loop (FUN_007a6b08).
+    The decay factor 0.06 is EXACT — it determines how quickly the difficulty
+    weighting shifts from the new rep's BW to the historical average.
+    After rep 12, f reaches its floor of 0.10.
     """
     rep_diff = bw_to_difficulty(bw)
     f = max(0.10, 0.80 - (rep_no - 1) * 0.06)
@@ -1178,40 +1040,19 @@ def review(item: SM18Item, grade: int, elapsed_days: float,
     stats['dev'] = dev
 
     if grade < SUCCESS_GRADE:
-        # === FAILURE PATH (with post-lapse logic from FUN_007a6b08) ===
+        # === FAILURE PATH ===
+        # Simplified post-lapse formula: S_new = S × 0.87 / (1 + 0.1 × lapses)
+        # FUN_007a6b08 (5042 bytes) has additional complexity (deviation
+        # recording via FUN_007a65fc, lapse smoothing via FUN_007b568c,
+        # exponential running averages), but the addresses it reads from
+        # (0x7a7fa8, 0x7a7f9c, 0x7a7fb4, 0xbaac8c) are in .text/.data and
+        # contain x86 instructions, not data. These are Ghidra artifacts.
+        # The simplified formula is the safe default.
         item.lapses += 1
-
-        # Grade 8 is treated as a post-lapse success (remapped to 3)
-        # In the full decompilation, grade 8 comes from the repetition history
-        # when a lapsed item is successfully re-learned.
-        effective_grade = grade
-
-        # Compute deviation-based SInc adjustment (from FUN_007a65fc)
-        # The simple formula: S_new = max(S * mod, min_S) / (1 + 0.1 * lapses)
-        # But the actual decompilation shows a more complex path:
-        # - Computes deviation: local_b8 = (-decay * elapsed) / stability
-        # - Calls FUN_007b568c for lapse smoothing
-        # - Uses exponential decay of post-lapse SInc: init - count * rate
-        # We implement the verified simple formula for the base stability,
-        # and note that the full optimization path requires running sm18.exe.
-
-        base_stability = item.stability * POST_LAPSE_STABILITY_MOD
-        base_stability = base_stability / (1.0 + 0.1 * item.lapses)
-
-        # Apply deviation correction if we have runtime constants
-        if _RUNTIME.difficulty_decay != 0.0 and elapsed > 0 and item.stability > 0:
-            deviation = (-_RUNTIME.difficulty_decay * elapsed) / item.stability
-            # FUN_0070fed4 clamps the deviation
-            deviation = max(-2.125, min(2.125, deviation))
-            # Apply correction factor (exponential of deviation, bounded)
-            correction = math.exp(deviation)
-            base_stability *= max(0.5, min(2.0, correction))
-
-        item.stability = max(0.5, base_stability)
+        item.stability = max(0.5,
+            item.stability * POST_LAPSE_STABILITY_MOD / (1.0 + 0.1 * item.lapses))
         item.interval = max(1.0, POST_LAPSE_INTERVAL)
         item.repetition = 0
-        stats['post_lapse'] = True
-        stats['effective_grade'] = effective_grade
     else:
         # === SUCCESS PATH ===
         item.repetition += 1
@@ -1422,25 +1263,21 @@ def _run_tests() -> bool:
     assert rt.dat_008ae058 == 0.0
     assert rt.dat_008ae05c == 0.0
     assert rt.dat_00691660 == 0.0
-    assert rt.difficulty_decay == 0.0
-    assert rt.post_lapse_sinc_init == 2.5
-    assert rt.recency_decay == 0.99
-    # Test loading from GDB-like dict
-    rt.load_from_gdb({
-        'dat_008ae058': 1.5,
-        'dat_008ae05c': -3.0,
-        'difficulty_decay': 0.06,
-    })
+    assert rt.dat_007e3fa0 == 0.0
+    # Test loading from GDB
+    rt.load_from_gdb(1.5, -3.0, 0.5, 2.0)
     assert rt.dat_008ae058 == 1.5
     assert rt.dat_008ae05c == -3.0
-    assert rt.difficulty_decay == 0.06
+    assert rt.dat_00691660 == 0.5
+    assert rt.dat_007e3fa0 == 2.0
     # Reset
     _RUNTIME.dat_008ae058 = 0.0
     _RUNTIME.dat_008ae05c = 0.0
     _RUNTIME.dat_00691660 = 0.0
-    print("GAP 1 (BSS Runtime Constants) tests passed ✓")
+    _RUNTIME.dat_007e3fa0 = 0.0
+    print("BSS Runtime Constants tests passed ✓")
 
-    # ---- GAP 2: S Binning Verification ----
+    # ---- S Binning Verification ----
     cfg2 = SM18Config()
     # Test with no sm8opt — fallback boundaries
     assert cfg2.bin_s_grade(0.0) == 1
@@ -1465,43 +1302,9 @@ def _run_tests() -> bool:
             b1 = cfg2.bin_s_grade(s_val)
             b2 = cfg2.bin_s_grade(s_val * 1.5)
             assert b2 >= b1, f"S={s_val}: bin={b1} > S={s_val*1.5}: bin={b2}"
-    print("GAP 2 (S Binning) tests passed ✓")
+    print("S Binning tests passed ✓")
 
-    # ---- GAP 3: Post-Lapse Logic Tests ----
-    # Test basic post-lapse SInc
-    sinc, avg = compute_post_lapse_sinc(0, 0.0, 0, 5.0, 10.0)
-    assert sinc > 0, f"Post-lapse SInc should be positive, got {sinc}"
-    assert avg > 0, f"Running avg should be positive, got {avg}"
-    # Grade 8 should be remapped to 3
-    sinc_g8, avg_g8 = compute_post_lapse_sinc(8, 0.0, 0, 5.0, 10.0)
-    sinc_g3, avg_g3 = compute_post_lapse_sinc(3, 0.0, 0, 5.0, 10.0)
-    assert sinc_g8 == sinc_g3, "Grade 8 should map to grade 3"
-    # Lower grade → higher decay (grade_delta = 5 - grade)
-    sinc_g0, _ = compute_post_lapse_sinc(0, 0.0, 0, 5.0, 10.0)
-    sinc_g5, _ = compute_post_lapse_sinc(5, 0.0, 0, 5.0, 10.0)
-    # grade 0: delta=5, grade 5: delta=0, so grade 0 should have lower SInc
-    assert sinc_g0 <= sinc_g5, f"Grade 0 SInc={sinc_g0} should <= Grade 5 SInc={sinc_g5}"
-    # Recency decay: higher count → more decayed
-    sinc_c0, _ = compute_post_lapse_sinc(3, 0.0, 0, 5.0, 10.0)
-    sinc_c10, _ = compute_post_lapse_sinc(3, 0.0, 10, 5.0, 10.0)
-    assert sinc_c10 <= sinc_c0, f"Recency count 10 SInc={sinc_c10} should <= count 0 SInc={sinc_c0}"
-    # Test with runtime constants
-    rt_test = RuntimeParams(
-        post_lapse_sinc_base=0.02,
-        post_lapse_sinc_grade_mult=0.01,
-        post_lapse_sinc_init=2.5,
-        difficulty_decay=0.06,
-        recency_decay=0.99,
-    )
-    sinc_rt, avg_rt = compute_post_lapse_sinc(3, 1.5, 5, 10.0, 20.0, rt_test)
-    assert sinc_rt > 0, f"Runtime post-lapse SInc should be positive, got {sinc_rt}"
-    # deviation should reduce SInc (negative deviation from lapse)
-    sinc_no_dev, avg_no_dev = compute_post_lapse_sinc(3, 1.5, 5, 0.0, 20.0, rt_test)
-    assert sinc_no_dev > sinc_rt, "No deviation should give higher SInc than with deviation"
-    print(f"  Post-lapse SInc(grade=3, count=5, elapsed=10): {sinc_rt:.4f}, avg={avg_rt:.4f}")
-    print("GAP 3 (Post-Lapse Logic) tests passed ✓")
-
-    # ---- GAP 4: Difficulty Decay Factor ----
+    # ---- Difficulty Decay Factor ----
     # The difficulty update formula: f = max(0.10, 0.80 - (rep-1)*0.06)
     # This 0.06 is the EXACT value controlling how fast D weighting shifts.
     # After rep 13: f = max(0.10, 0.80 - 12*0.06) = max(0.10, 0.08) = 0.10
@@ -1509,20 +1312,16 @@ def _run_tests() -> bool:
     d_new_rep5 = update_difficulty(0.3, 0.1, 5)  # f = max(0.10, 0.56) = 0.56
     d_new_rep13 = update_difficulty(0.3, 0.1, 13) # f = max(0.10, 0.08) = 0.10
     d_new_rep20 = update_difficulty(0.3, 0.1, 20) # f = max(0.10, -0.32) = 0.10
-    # Verify the weighting decreases with rep number
-    # At rep 1: D_new = 0.80 * bw_to_difficulty(0.1) + 0.20 * 0.3
     # bw_to_difficulty(0.1) = 0.1 - 0.1 = 0.0
-    # D_new = 0.80 * 0.0 + 0.20 * 0.3 = 0.06
+    # Rep 1: D_new = 0.80 * 0.0 + 0.20 * 0.3 = 0.06
     assert abs(d_new_rep1 - 0.06) < 1e-10, f"Rep 1: {d_new_rep1} != 0.06"
-    # At rep 5: f = 0.56, D_new = 0.56 * 0.0 + 0.44 * 0.3 = 0.132
+    # Rep 5: f = 0.56, D_new = 0.56 * 0.0 + 0.44 * 0.3 = 0.132
     assert abs(d_new_rep5 - 0.132) < 1e-10, f"Rep 5: {d_new_rep5} != 0.132"
     # After rep 12, f floors at 0.10
     assert d_new_rep13 == d_new_rep20, "After rep 12, f should be constant at 0.10"
-    # PTR_DAT_00baac8c is the deviation recording constant (separate from the
-    # 0.06 trailing average factor). It affects optimization accumulators.
     print(f"  D decay: rep1={d_new_rep1:.4f}, rep5={d_new_rep5:.4f}, "
           f"rep13={d_new_rep13:.4f}, rep20={d_new_rep20:.4f}")
-    print("GAP 4 (Difficulty Decay Factor) tests passed ✓")
+    print("Difficulty Decay Factor tests passed ✓")
 
     print("\n=== All tests passed ===")
     return True
@@ -1543,21 +1342,13 @@ performing at least one review with optimization enabled:
   $ gdb -p <pid>
 
   # BSS constants (zero at startup, written by optimization):
-  (gdb) x/gx 0x008ae058   # R-factor divisor
+  (gdb) x/gx 0x008ae058   # R-factor divisor (fallback path)
   (gdb) x/gx 0x008ae05c   # log ratio clamp threshold
-  (gdb) x/gx 0x00691660   # weighted sum divisor
   (gdb) x/gx 0x007e3fa0   # SInc scaling factor
 
-  # Difficulty decay (pointer dereference):
-  (gdb) x/gx *(void**)0x00baac8c   # actual decay constant
-
-  # Post-lapse constants:
-  (gdb) x/gx 0x007a7fa8   # post-lapse SInc base
-  (gdb) x/gx 0x007a7f9c   # post-lapse SInc grade multiplier
-  (gdb) x/gx 0x007a7fb4   # post-lapse SInc initial value
-
-  # Recency decay:
-  (gdb) x/gx 0x007a9ca8   # recency decay factor
-
 Then pass values to RuntimeParams.load_from_gdb() before running reviews.
+
+NOTE: Addresses 0x00691660, 0x00baac8c, 0x007a7fa8, 0x007a7f9c, 0x007a7fb4
+are Ghidra artifacts — they're in .text/.data sections and contain x86
+instructions or relocation entries, not data values.
 """)

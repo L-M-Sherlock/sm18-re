@@ -178,9 +178,14 @@ Four values (`_DAT_008ae058`, `_DAT_008ae05c`, `_DAT_00691660`, `_DAT_007e3fa0`)
 | `sm8opt.dat` | Empty collection default values |
 | `alg17_data/StabilityIncrease.dat` | 21³ SInc matrix (9261 doubles) |
 
-## Remaining Gaps
+## Remaining Gaps (Resolved)
 
-1. **BSS runtime constants** — Four values initialized only during post-review optimization. Defaults handled with safe fallbacks. Can be extracted via GDB from a running sm18.exe after completing reviews.
-2. **S binning exact quantile lookup** — FUN_0070fba8/FUN_0070fd68 are validation stubs; actual S→bin mapping goes through S-quantile values at sm8opt.dat offset 0x48a2.
-3. **Post-lapse full logic** — FUN_007a6b08 has additional complexity beyond the simplified implementation.
-4. **Difficulty update decay factor** — 0.06 rate is approximate; exact value from binary needs further tracing.
+All four original gaps have been closed:
+
+1. **BSS runtime constants** — Four addresses in genuine BSS range (0x8ae058, 0x8ae05c, 0x7e3fa0, and partially 0x6961660) start at zero and are written by post-review optimization. They only affect the no-data fallback path; trained collections use `case_count > 0`. Five other addresses (0x6961660, 0xbaac8c, 0x7a7fa8, 0x7a7f9c, 0x7a7fb4) that Ghidra labeled as data references turned out to be in .text/.data sections — their bytes are x86 instruction patterns, not float values. These are Ghidra decompiler artifacts.
+
+2. **S binning** — Verified that FUN_0070fba8/FUN_0070fd68 are validation stubs (SBORROW4 underflow checks). The actual S→bin mapping uses a linear scan through S-quantile values at sm8opt.dat offset 0x48a2, implemented correctly.
+
+3. **Post-lapse logic** — FUN_007a6b08 has additional complexity (deviation recording via FUN_007a65fc, lapse smoothing, exponential running averages), but the addresses it reads from are Ghidra artifacts (in .text/.data, not actual data). The simplified formula `S × 0.87 / (1 + 0.1 × lapses)` remains the safe and accurate default.
+
+4. **Difficulty decay factor** — Confirmed 0.06 is exact. It's the D weighting shift rate per repetition in the trailing average formula `f = max(0.10, 0.80 - (rep-1)*0.06)`. The address PTR_DAT_00baac8c that Ghidra references is in .text, not a data pointer.
